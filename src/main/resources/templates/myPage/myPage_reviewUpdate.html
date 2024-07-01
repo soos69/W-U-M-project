@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+
+<th:block layout:fragment="css">
+	<link rel="stylesheet" th:href="@{/css/myPage_review.css}">
+</th:block>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+	function updateScore(radio) {
+        document.getElementById('hiddenScore').value = radio.value;
+        console.log(document.getElementById('hiddenScore').value);
+    }
+
+	function reviewUpdate() {
+	let reviewContent = $("textarea[name='reviewContent']").val();
+		if(reviewContent == null || reviewContent == ""){
+			alert("내용을 적어주세요");
+			return;
+		}
+		if(confirm("리뷰를 수정할까요?")){
+			let scoreSeq = $("input[name='scoreSeq']").val();
+			let score = $("input[name='score']").val();
+
+
+			console.log("scoreSeq:", scoreSeq);
+			console.log("score:", score);
+			console.log("reviewContent:", reviewContent);
+
+			let data = {
+				scoreSeq: scoreSeq,
+				score: score,
+				reviewContent: reviewContent
+			};
+
+			$.ajax({
+				type: "POST",
+				url: "/myPage/reviewUpdate",
+				contentType: "application/json",
+				data: JSON.stringify(data),
+				success: function(response) {
+					 $("#contentCell").html(response);
+				},
+				error: function(xhr, status, error) {
+					console.error("Error updating content:", error);
+					alert("수정 중 오류가 발생했습니다.");
+				}
+			});
+		}
+	}
+
+	function reviewDelete() {
+		if(confirm("리뷰를 삭제할까요?")){
+			let scoreSeq = $("input[name='scoreSeq']").val();
+			let userSeq = $("input[name='userSeq']").val();
+
+			let data = {
+				scoreSeq: scoreSeq,
+				userSeq: userSeq,
+			};
+
+			$.ajax({
+				type: "POST",
+				url: "/myPage/reviewUpdate/delete?scoreSeq="+scoreSeq,
+				contentType: "application/json",
+				data: JSON.stringify(data),
+				success: function(response) {
+					 $("#contentCell").html(response);
+				},
+				error: function(xhr, status, error) {
+					console.error("Error updating content:", error);
+					alert("삭제 중 오류가 발생했습니다.");
+				}
+			});
+		}
+	};
+
+	function moveScoreList() {
+        $.ajax({
+            type: "GET",
+            url: "/myPage/review",
+            success: function(response) {
+                $("#contentCell").html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error loading page:", error);
+            }
+        });
+    };
+</script>
+
+
+<div class="reviewPage">
+	<center >
+		<form role="form" method="post" id="updateReview" th:object="${userScoreForm}">
+			<input type="hidden" name="scoreSeq" th:value="${scoreSeq}">
+			<input type="hidden" name="userSeq" th:value="${userSeq}">
+			<table border="1">
+				<tr>
+					<td width="70">영화 제목</td>
+					<td align="center">
+						<span th:text="${userScoreDto.movieName}">Default Movie Name</span>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p>별점</p>
+					</td>
+					<td class="star" align="center">
+						<input type="hidden" th:field="${userScoreDto.score}" name="score" id="hiddenScore">
+
+						<input type="radio" name="reviewStar" value="5" id="rate1" th:checked="${userScoreDto.score} == 5" onclick="updateScore(this)">
+						<label for="rate1">★</label>
+
+						<input type="radio" name="reviewStar" value="4" id="rate2" th:checked="${userScoreDto.score} == 4" onclick="updateScore(this)">
+						<label for="rate2">★</label>
+
+						<input type="radio" name="reviewStar" value="3" id="rate3" th:checked="${userScoreDto.score} == 3" onclick="updateScore(this)">
+						<label for="rate3">★</label>
+
+						<input type="radio" name="reviewStar" value="2" id="rate4" th:checked="${userScoreDto.score} == 2" onclick="updateScore(this)">
+						<label for="rate4">★</label>
+
+						<input type="radio" name="reviewStar" value="1" id="rate5" th:checked="${userScoreDto.score} == 1" onclick="updateScore(this)">
+						<label for="rate5">★</label>
+					</td>
+				</tr>
+				<tr>
+					<td > 내용 </td>
+					<td align="Left">
+						<textarea name="reviewContent" rows="10" cols="50"  th:field="${userScoreDto.reviewContent}">
+						</textarea>
+						<p th:if="${#fields.hasErrors('reviewContent')}" th:errors="*{reviewContent}" class="fieldError">Incorrect data</p>
+					</td>
+				</tr>
+				<tr>
+					<td > 추천수 </td>
+					<td align="center">
+						<span th:text="${userScoreDto.reviewLike}"/>
+					</td>
+				</tr>
+				<tr>
+					<td > 등록일 </td>
+					<td align="center">
+						<span th:text="${userScoreDto.postDate}"/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<button type="button" onclick="reviewUpdate()">수정</button>
+						<button type="button" onclick="reviewDelete()">삭제</button>
+						<button type="button" onclick="moveScoreList()">목록</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</center>
+</div>
+</html>

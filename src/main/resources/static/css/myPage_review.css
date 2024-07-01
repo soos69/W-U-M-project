@@ -1,0 +1,207 @@
+@charset "utf-8";
+* {
+    margin: 0;
+    padding: 0;
+}
+
+input {
+    color: white;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    color: white;
+    font-size: 15px;
+    line-height: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    font-size: 15px; /* 테이블 글씨 크기 조정 */
+}
+
+.buttons a {
+    border: 1px solid rgb(108, 108, 108);
+    border-radius: 5px;
+    background-color: inherit;
+    cursor: pointer;
+    color: white;
+    padding: 10px;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+.searchText {
+    background-color: #ccc;
+    color: black;
+    outline: none;
+    box-shadow: none;
+    border-radius: 3px;
+    width:300px;
+    height :25px;
+}
+
+.poster {
+    vertical-align: middle;
+    border: 0;
+    width: 100px;
+    height: 150px;
+}
+
+.order {
+    display: flex;
+}
+.pageList {
+    display: flex;
+    justify-content: center; /* 페이지 링크를 중앙에 배치 */
+    gap: 10px; /* 페이지 링크 사이의 간격 */
+
+}
+
+.page-item {
+    margin: 0 5px; /* 페이지 항목 간의 여백 */
+}
+
+.page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(108, 108, 108);
+    border-radius: 5px;
+    background-color: inherit;
+    cursor: pointer;
+    color: white;
+    padding: 5px; /* 페이지 링크 내부 여백 */
+    width: 20px;
+    height: 20px;
+}
+
+.page-link:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.fieldError {
+    color: red;
+}
+
+.requirePage {
+    margin: 40px auto;
+}
+
+.infoPage {
+    margin: 40px auto;
+}
+
+.infoPage td {
+    padding: 10px;
+    text-align: center; /* 가로 정렬: 가운데 */
+    vertical-align: middle; /* 세로 정렬: 가운데 */
+    padding-left: 10px; /* 글자 앞에 10px 여백 */
+}
+
+.reviewPage {
+    margin: 40px auto;
+}
+
+.requirePage button {
+    border: 1px solid rgb(108, 108, 108);
+    border-radius: 5px;
+    background-color: inherit;
+    cursor: pointer;
+    color: white;
+    padding: 5px;
+}
+
+textarea {
+    resize: none;
+    color: white;
+}
+
+#title {
+    width: 1000px;
+}
+
+#context {
+    width: 1000px;
+}
+
+.star {
+    direction: rtl;
+}
+
+.buttons a {
+    padding: 9px;
+    border: 1px solid rgb(108, 108, 108);
+    border-radius: 5px;
+    padding: 4px;
+    font-size: 14px;
+}
+
+button {
+    border: 1px solid rgb(108, 108, 108);
+    border-radius: 5px;
+    background-color: inherit;
+    cursor: pointer;
+    color: white;
+    padding: 5px;
+}
+
+input[type=radio] {
+    display: none;
+}
+
+.star label {
+    cursor: pointer;
+    font-size: 20px;
+    color: transparent;
+    text-shadow: 0 0 0 #f0f0f0;
+}
+
+.star label:hover {
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.star label:hover ~ label {
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.star input[type=radio]:checked ~ label {
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+table {
+    width: 100%; /* 전체 너비 사용 */
+    max-width: 1200px; /* 최대 너비 */
+}
+
+td, th {
+    padding: 10px; /* 셀 내부 여백 */
+}
+
+td button:hover, .buttons:hover a{
+   background-color: #444;
+   color: white;
+}
+
+
+/* 새로운 select 스타일 */
+select {
+    background-color: #444; /* 배경색 */
+    color: white; /* 글자색 */
+    border: 1px solid rgb(108, 108, 108); /* 테두리 */
+    border-radius: 3px; /* 테두리 둥글게 */
+    padding: 3px; /* 내부 여백 */
+
+    width: 100px; /* 원하는 너비로 조정 */
+}
+
+/* select 요소의 옵션 스타일 */
+select option {
+    background-color: #444; /* 옵션 배경색 */
+    color: white; /* 옵션 글자색 */
+}

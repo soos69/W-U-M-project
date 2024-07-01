@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/memberList.css}">
+</th:block>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/memberList.js}"></script>
+</th:block>
+
+    <div class="wrap" layout:fragment="content">
+        <h1>회원관리(관리자ver)</h1>
+        <form class="listform">
+            <table border="1">
+                <tr>
+                    <th width="20"><input type="checkbox" id="selectAll"></th>
+                    <th width="50">번호</th>
+                    <th width="100">회원번호</th>
+                    <th width="100">닉네임</th>
+                    <th width="100">아이디</th>
+                    <th width="80">이름</th>
+                    <th width="180">연락처</th>
+                    <th width="80">게시글수</th>
+                    <th width="100">가입일자</th>
+                </tr>
+                <tr align="center" th:each="user : ${userList}">
+                    <td><input name="checkUser" type="checkbox" class="memberCheckbox" th:value="${user.seq}"></td>
+                    <td th:text="${user.num}"></td>
+                    <td><a th:text="${user.seq}" th:href="@{/admin/info/{seq} (seq=${user.seq})}"></a></td>
+                    <td><a th:text="${user.nickname}" th:href="@{/admin/info/{seq} (seq=${user.seq})}"></a></td>
+                    <td><a th:text="${user.id}" th:href="@{/admin/info/{seq} (seq=${user.seq})}"></a></td>
+                    <td><a th:text="${user.name}" th:href="@{/admin/info/{seq} (seq=${user.seq})}"></a></td>
+                    <td th:text="${user.tel}"></td>
+                    <td th:text="${user.cnt}"></td>
+                    <td th:text="${user.regDate}"></td>
+                </tr>
+
+                <tr>
+                    <td class="page_num" colspan="8" th:with="start=${pageHandler.beginPage}, end=${pageHandler.endPage}">
+                        <ul class="page-head">
+
+                            <li class="page-list" th:classappend="${pageHandler.firstPage}?'disabled': ''">
+                                <a th:if="${not pageHandler.firstPage}" th:onclick="'javascript:page(' + ${pageHandler.page-1} + ')'" aria-label='Previous' class="page-link">
+                                    <span aria-hidden='true'>이전</span>
+                                </a>
+                                <a th:if="${pageHandler.firstPage}" href="#" class="page-list" aria-disabled="true">
+                                    <span aria-hidden='true'>이전</span>
+                                </a>
+                            </li>
+
+                            <li class="page-list" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${pageHandler.page eq page}?'active':''">
+                                <a th:href="@{'/admin/list/' + ${page}}" th:text="${page}" class="page-list"></a>
+                            </li>
+
+                            <li class="page-list" th:classappend="${pageHandler.lastPage}?'disabled' : ''">
+                                <a th:if="${not pageHandler.lastPage}" th:onclick="'javascript:page(' + ${pageHandler.page + 1} + ')'" aria-label='Next' class="page-link">
+                                    <span aria-hidden='true'>다음</span>
+                                </a>
+                                <a th:if="${pageHandler.lastPage}" class="page-list" aria-disabled="true">
+                                    <span aria-hidden='true'>다음</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </td>
+                    <td align="center">
+                        <button type="button" id="deleteButton">삭제</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+
+
+</html>

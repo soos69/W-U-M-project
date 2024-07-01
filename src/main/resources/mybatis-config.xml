@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <typeAliases>
+	    <typeAlias alias="userDto" type="com.hnpl.wum.user.dto.UserDto"/>
+        <typeAlias alias="userDetailDto" type="com.hnpl.wum.user.dto.UserDetailDto"/>
+        <typeAlias alias="userInfoDto" type="com.hnpl.wum.myPage.dto.UserInfoDto"/>
+        <typeAlias alias="userScoreDto" type="com.hnpl.wum.myPage.dto.UserScoreDto"/>
+        <typeAlias alias="userRequireDto" type="com.hnpl.wum.myPage.dto.UserRequireDto"/>
+        <typeAlias alias="userWishDto" type="com.hnpl.wum.myPage.dto.UserWishDto"/>
+        <typeAlias alias="movieDto" type="com.hnpl.wum.admin.dto.MovieDto"/>
+        <typeAlias alias="movieSearchDto" type="com.hnpl.wum.admin.dto.MovieSearchDto"/>
+        <typeAlias alias="movieMainDto" type="com.hnpl.wum.admin.dto.MovieMainDto"/>
+        <typeAlias alias="requireDto" type="com.hnpl.wum.require.dto.RequireDto"/>
+        <typeAlias alias="requireSearchDto" type="com.hnpl.wum.require.dto.RequireSearchDto"/>
+        <typeAlias alias="scoreDto" type="com.hnpl.wum.admin.dto.ScoreDto"/>
+    </typeAliases>
+</configuration>

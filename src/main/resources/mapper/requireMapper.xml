@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnpl.wum.require.mapper.RequireMapper">
+
+    <sql id="requireSearchCondition">
+        <if test="requireSearchDto.searchBy != null and requireSearchDto.searchText != '' ">
+            <choose>
+                <when test="(requireSearchDto.searchBy).equals('title')">
+                    AND title LIKE CONCAT('%',#{requireSearchDto.searchText},'%')
+                </when>
+                <when test="(requireSearchDto.searchBy).equals('content')">
+                    AND content LIKE CONCAT('%',#{requireSearchDto.searchText},'%')
+                </when>
+                <when test="(requireSearchDto.searchBy).equals('nickname')">
+                    AND nickname LIKE CONCAT('%',#{requireSearchDto.searchText},'%')
+                </when>
+                <when test="(requireSearchDto.searchBy).equals('titleContent')">
+                    AND (title LIKE CONCAT('%',#{requireSearchDto.searchText},'%')
+                    OR content LIKE CONCAT('%',#{requireSearchDto.searchText},'%'))
+                </when>
+            </choose>
+        </if>
+    </sql>
+
+    <insert id="addRequire" parameterType="requireDto" useGeneratedKeys="true" keyColumn="require_seq" keyProperty="requireSeq">
+        INSERT INTO `require` (user_seq,title,content) VALUES (#{userSeq},#{title},#{content})
+    </insert>
+    <update id="updateRequire" parameterType="requireDto">
+        UPDATE `require` SET title = #{title} , content = #{content} WHERE require_seq = #{requireSeq} AND user_seq = #{userSeq}
+    </update>
+    <delete id="deleteRequire" parameterType="map">
+        DELETE FROM `require` WHERE user_seq = #{userSeq} AND require_seq = #{requireSeq}
+    </delete>
+
+    <select id="findRequireSeq" parameterType="requireDto">
+        SELECT require_seq FROM `require` WHERE user_seq = #{userSeq} AND title = #{title} AND content = #{content} AND post_date = #{postDate}
+    </select>
+
+    <select id="requireList" parameterType="map" resultType="requireDto">
+        SELECT require_seq ,r.user_seq, title, content,TO_CHAR(post_date,'YYYY-MM-DD HH24:MI:SS') post_date, require_like, nickname
+        FROM `require` r, user u
+        WHERE u.user_seq = r.user_seq
+            <include refid="requireSearchCondition"/>
+        ORDER BY require_seq DESC LIMIT #{pageSize} OFFSET #{page};
+    </select>
+
+    <select id="countRequire" resultType="int">
+        SELECT count(*) FROM `require`
+    </select>
+
+    <select id="requireDetail" parameterType="long" resultType="requireDto">
+        SELECT require_seq ,r.user_seq, title, content,TO_CHAR(post_date,'YYYY-MM-DD HH24:MI:SS') post_date, require_like, nickname
+        FROM `require` r, user u
+        WHERE u.user_seq = r.user_seq AND require_seq = #{requireSeq}
+    </select>
+
+    <update id="changeRecommend" parameterType="map">
+        UPDATE `require` SET require_like = #{requireLike} WHERE require_seq = #{requireSeq}
+    </update>
+    <insert id="insertRecommend" parameterType="map">
+        INSERT INTO require_like(user_seq,require_seq) VALUES(#{userSeq},#{requireSeq})
+    </insert>
+    <delete id="removeRecommend" parameterType="map">
+        DELETE FROM require_like WHERE user_seq = #{userSeq} AND require_seq = #{requireSeq} AND like_seq = #{likeSeq}
+    </delete>
+    <select id="userCheck" parameterType="map" resultType="long">
+        SELECT like_seq FROM require_like WHERE user_seq = #{userSeq} AND require_seq = #{requireSeq}
+    </select>
+</mapper>

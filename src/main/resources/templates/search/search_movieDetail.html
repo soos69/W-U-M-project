@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/moviedetail.css}"/>
+</th:block>
+
+    <div class="wrap" layout:fragment="content">
+
+        <input type="hidden" id="movieSeq" th:value="${movieForm.movieSeq}">
+
+        <div class="container">
+            <div class="imgs">
+                <img class="poster" th:src="${movieForm.Poster}" th:alt="${movieForm.movieName}" >
+                <div class="heart_icon">
+                    <img id="jjim" th:src="${heartImg}" data-liked="false">
+                </div>
+            </div>
+            <div class="movie_content">
+                <p class="movie_title" th:text="${movieForm.movieName}"></p><br><br>
+                <p class="movie_date" th:text="'개봉 :  ' + ${movieForm.movieYear}"></p>
+                <p class="movie_date" th:text="'등급 :  ' + ${movieForm.rating}"></p>
+                <p class="movie_genre" th:text="'장르 :  ' + ${movieForm.genre}"></p>
+                <p class="movie_director" th:text="'감독 :  ' + ${movieForm.director}"></p>
+                <p class="movie_actor" th:text="'배우 :  ' + ${movieForm.actor}"></p><br>
+                <p class="movie_plot" th:text="${movieForm.plot}"></p>
+            </div>
+        </div><!-- container -->
+        <br><br>
+
+        <hr class = "line">
+        <br>
+
+        <!-- 평점 및 후기 작성-->
+        <div class="container">
+            <form class="review_form" name="myform" method="post">
+                <fieldset>
+                    <span class="text-bold">별점을 선택해주세요</span>
+                    <input type="radio" name="reviewStar" value="5" id="rate5">
+                    <label for="rate5">★</label>
+                    <input type="radio" name="reviewStar" value="4" id="rate4">
+                    <label for="rate4">★</label>
+                    <input type="radio" name="reviewStar" value="3" id="rate3">
+                    <label for="rate3">★</label>
+                    <input type="radio" name="reviewStar" value="2" id="rate2">
+                    <label for="rate2">★</label>
+                    <input type="radio" name="reviewStar" value="1" id="rate1">
+                    <label for="rate1">★</label>
+                </fieldset>
+
+                <div>
+                    <input type="text" id="review" class="review" placeholder="관람평 작성"/>
+                    <button onclick="submitReview(); return false;">등록</button>
+                    <p th:if="${errorMessage}" class="error" th:text="${errorMessage}"></p>
+                </div>
+                <table border="1">
+                    <tr>
+                        <th width="100">별점</th>
+                        <th width="300">후기</th>
+                        <th width="200">작성일</th>
+                    </tr>
+                    <tr th:each="review: ${reviewList}">
+                        <td align="center" >
+                            <span th:if="${review.score}==1 ">★☆☆☆☆</span>
+                            <span th:if="${review.score}==2 ">★★☆☆☆</span>
+                            <span th:if="${review.score}==3 ">★★★☆☆</span>
+                            <span th:if="${review.score}==4 ">★★★★☆</span>
+                            <span th:if="${review.score}==5 ">★★★★★</span>
+                        </td>
+                        <td align="center" th:text="${review.reviewContent}"></td>
+                        <td align="center" th:text="${review.postDate}"></td>
+                    </tr>
+                </table>
+
+            </form>
+        </div>
+        <script th:src="@{/js/detail.js}"></script>
+    </div><!-- . wrap -->
+</html>

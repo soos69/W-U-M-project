@@ -1,0 +1,163 @@
+@charset "utf-8";
+* {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-size: 16px;
+}
+
+h2 {
+    color: rgb(222, 222, 222);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 18px;
+}
+
+body {
+    background-color: #1f1e1e;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: white;
+    font-size: 15px;
+    line-height: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+
+img {
+    vertical-align: middle;
+    border: 0;
+}
+
+.wrap {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 10px;
+    margin-top: 80px;
+}
+
+.container {
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    align-items: flex-start;
+    padding: 20px;
+    text-align: left;
+    position: relative;
+}
+
+.poster {
+    max-width: 200px;
+    height: auto;
+    margin-right: 60px;
+}
+
+.movie_content {
+    max-width: 650px;
+    font-size: 16px;
+    color: #8f8f8f;
+    position: relative; /* 자식 요소를 기준으로 배치하기 위해 추가 */
+}
+
+.movie_title {
+    font-size: 35px;
+    font-weight: 500;
+    display: inline-block; /* 하트 아이콘 옆에 배치되도록 설정 */
+}
+
+.heart_icon {
+    position: absolute;
+    top: 15px;
+    left: 19%; /* 제목 바로 옆에 배치되도록 설정 */
+    margin-left: 10px; /* 제목과 하트 사이 간격 */
+    cursor: pointer;
+}
+
+.heart_icon img {
+    width: 30px;
+}
+
+.movie_date, .movie_genre, .movie_director, .movie_plot {
+    margin-top: 15px;
+    margin-bottom: 15px;
+     font-size: 15px;
+	 line-height :28px;
+
+}
+.movie_actor{
+	font-size: 13px;
+	 line-height :22px;
+
+}
+ .movie_plot{
+	 font-size: 15px;
+	 font-style:oblique;
+	  line-height :30px;
+ }
+
+
+
+/* 평점과 후기 */
+.review_form fieldset {
+	display: inline-block;
+	direction: rtl;
+	border:0;
+	margin: 20px;
+}
+
+.text-bold {
+	color: #8f8f8f;
+}
+
+.review_form fieldset {
+	text-align: right;
+}
+
+
+.review_form input[type=radio] {
+	display: none;
+
+}
+
+.review_form label{
+	font-size: 45px;
+	color: transparent;
+	text-shadow: 0 0 0 #f0f0f0;
+}
+
+.review_form label:hover,
+.review_form label:hover ~ label,
+.review_form input[type=radio]:checked ~ label{
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+.review {
+	width: 800px;
+	padding: 15px;
+	border: solid 1.5px #D3D3D3;
+	border-radius: 5px;
+	font-size: 16px;
+	color: #8f8f8f;
+	margin-bottom: 40px;
+	margin-top: 15px;
+}
+
+button {
+	padding: 13px;
+	border-radius: 5px;
+	border: solid 1.5px #D3D3D3;
+	font-size: 18px;
+	color: #8f8f8f;
+}
+
+
+.wrap button:hover {
+	background-color:#D3D3D3;
+}
+
+#my_review {
+	color: #8f8f8f;
+
+}

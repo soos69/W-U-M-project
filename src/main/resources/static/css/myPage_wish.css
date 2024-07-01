@@ -1,0 +1,96 @@
+@charset "uft-8";
+
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    font-family: 'Noto Sans KR', sans-serif;
+    color: white;
+    font-size: 15px;
+    line-height: 20px;
+}
+a{
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px; /* 테이블 글씨 크기 조정 */
+}
+.poster {
+    vertical-align: middle;
+    border: 0;
+    width:150px;
+    height:200px;
+}
+ul, ol {
+    list-style: none;
+}
+
+.pageList{
+    display: flex;
+}
+.page-link:hover{
+    cursor: pointer;
+}
+
+button {
+    border: none;
+    outline: none;
+    background-color: inherit ;
+    cursor: pointer;
+    color: white
+}
+
+.grid {
+
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+}
+
+@media screen and (max-width: 718px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3px;
+    }
+}
+
+.card-container {
+    position: relative;
+}
+
+.card-box {
+    position: relative;
+    width: 150px;
+    height: 200px;
+}
+
+.movie-check {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+.pageNavigation{
+
+    width : 500px;
+    margin : 0 auto;
+}
+.checkboxText{
+    cursor : pointer;
+}
+.wishContent{
+    margin-top : 40px;
+    margin-left : 35px;
+}
+
+table {
+    width: 100%; /* 전체 너비 사용 */
+    max-width: 1200px; /* 최대 너비 */
+    margin: auto; /* 가운데 정렬 */
+}
+
+td, th {
+    padding: 10px; /* 셀 내부 여백 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}

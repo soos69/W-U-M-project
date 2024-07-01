@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/memberList.css}">
+</th:block>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/memberInfo.js}"></script>
+</th:block>
+
+
+<div class="wrap" layout:fragment="content">
+        <h1>회원 작성 게시물</h1>
+        <div>
+            <p>회원 번호: <span th:text="${userDetail.userSeq}"></span></p>
+            <p>닉네임: <span th:text="${userDetail.nickname}"></span></p>
+            <p>아이디: <span th:text="${userDetail.id}"></span></p>
+            <!-- 추가적인 사용자 정보 필요 시 추가 -->
+        </div>
+        <form class="listform" action="" method="post">
+            <table border="1">
+                <tr>
+                    <th width="20"><input type="checkbox" id="selectAll"></th>
+                    <th width="50">번호</th>
+                    <th width="200">제목</th>
+                    <th width="100">작성일</th>
+                    <th width="50">좋아요</th>
+                </tr>
+                <tr align="center" th:each="uRList : ${userRequireList}">
+                <td><input name="checkUser" type="checkbox" class="memberCheckbox" th:value="${uRList.requireSeq}"></td>
+                <td th:text="${uRList.requireSeq}"></td>
+                <td th:text="${uRList.title}"></td>
+                <td th:text="${uRList.postDate}"></td>
+                <td th:text="${uRList.requireLike}"></td>
+                </tr>
+                <tr>
+                    <td class="page_num" colspan="5">
+                        <button type="button" id="deleteButton2" >삭제</button>
+                    </td>
+                </tr>
+
+
+            </table>
+        </form>
+    </div>  
+
+</html>

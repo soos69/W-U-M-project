@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/movieList.css}">
+</th:block>
+
+    <div class="wrap" layout:fragment="content">
+
+        <h1>영화목록관리(관리자ver)</h1><br>
+        <form action="/admin/movieList" role="form" method="get" th:object="${movieDto}">
+            <table border="1">
+                <tr>
+                    <th width="20"><input type="checkbox" id="selectAll"></th>
+                    <th width="30">영화번호</th>
+                    <th width="110">장르</th>
+                    <th width="150">영화제목</th>
+                    <th width="100">개봉년도</th>
+                    <th width="80">감독</th>
+                    <th width="400">출연</th>
+                    <th width="600">줄거리</th>
+                    <th width="110">관람등급</th>
+                    <th width="80">키워드</th>
+                    <th width="70"></th>
+                </tr>
+                <tr th:each="movieDto : ${movieDto}" align="center">
+                    <td><input type="checkbox" class="movieCheckbox" name="movieCheckbox" th:value="${movieDto.movieSeq}"></td>
+                    <td th:text=${movieDto.movieSeq}>영화번호</td>
+                    <td th:text=${movieDto.genre}>장르</td>
+                    <td>
+                        <a th:href="@{'/admin/movie/' + ${movieDto.movieSeq}}" th:text=${movieDto.movieName}>영화제목</a>
+                    </td>
+                    <td th:text=${movieDto.movieYear}>개봉년도</td>
+                    <td th:text=${movieDto.director}>감독</td>
+                    <td th:text=${movieDto.actor}>출연</td>
+                    <td th:text=${movieDto.plot} >줄거리</td>
+                    <td th:text=${movieDto.rating}>관람등급</td>
+                    <td th:text=${movieDto.keyword}>키워드</td>
+                    <td>
+                        <button><a th:href="@{'/admin/movie/' + ${movieDto.movieSeq}}" class="editBtn">수정</a></button>
+                    </td>
+                </tr>
+            </table>
+
+            <div th:with="start=${pageHandler.beginPage}, end=${pageHandler.endPage}" class="list-btm">
+                <ul class="pagination justify-content-center">
+
+                    <li th:if="${not pageHandler.firstPage}" class="page-item" th:classappend="${pageHandler.firstPage} ? 'disabled': ''">
+                        <a th:onclick=" 'javascript:page(' + ${pageHandler.page-1} + ')' " aria-label='Previous' class="page-link">
+                            <span aria-hidden='true'>이전</span>
+                        </a>
+
+                    </li>
+
+                    <li th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${pageHandler.page eq page} ? 'active' : ''" class="page-item">
+                        <a th:onclick=" 'javascript:page(' + ${page} + ')' " th:inline="text" class="page-link">[[${page}]]</a>
+                    </li>
+
+                    <li th:if="${not pageHandler.lastPage}" th:classappend="${pageHandler.lastPage} ? 'disabled' : ''" class="page-item">
+                        <a th:onclick=" 'javascript:page(' + ${pageHandler.page+1} + ')' " aria-label='Next' class="page-link">
+                            <span aria-hidden='true'>다음</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="btns">
+                <button type="button"><a href="/admin/movie/new">등록</a></button>
+                <button type="button" id="deleteButton">삭제</button>
+            </div>
+
+
+            <div class="searchBox" th:object="${movieSearchDto}">
+                <input th:field="*{searchText}" type="text" name="searchText" class="searchText" placeholder="검색어를 입력해주세요">
+                <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
+            </div>
+        </form>
+    </div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/movieList.js}"></script>
+</th:block>
+</html>

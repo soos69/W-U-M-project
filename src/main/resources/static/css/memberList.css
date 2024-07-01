@@ -1,0 +1,75 @@
+*{
+    margin: 0;
+    padding: 0;
+    color: black;
+    background-color: #B8B8B8;
+}
+
+a {
+    text-decoration: none;
+
+}
+
+.wrap {
+    width:1280px;
+    margin:0 auto;
+
+    /* color: #b7b7b7; */
+}
+
+h1{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+table {
+    width: 100%; /* 전체 너비 사용 */
+    max-width: 1200px; /* 최대 너비 */
+    margin-bottom:100px;
+}
+th {
+    padding: 10px; /* 셀 내부 여백 */
+    font-size:18px;
+}
+
+td {
+    padding: 10px; /* 셀 내부 여백 */
+    font-size:15px;
+}
+
+.page-head {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.page-head a{
+     border : 1px solid rgb(108, 108, 108);
+    border-radius : 7px;
+    background-color: inherit ;
+    cursor: pointer;
+    padding : 5px;
+    margin: 0 5px;
+    position: relative;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.page-list {
+    margin-left:5px;
+}
+
+.page-item, button {
+    border : 1px solid rgb(108, 108, 108);
+    border-radius : 5px;
+    background-color: inherit ;
+    cursor: pointer;
+    padding : 5px;
+    margin: 0 5px;
+    position: relative;
+    font-size:13px;
+    font-weight:bold;
+
+}
+

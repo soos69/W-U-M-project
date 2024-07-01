@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+	<link rel="stylesheet" th:href="@{/css/myPage_review.css}">
+</th:block>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:inline="javascript">
+	$(document).ready(function() {
+		let errorMessage = /*[[${errorMessage}]]*/ "";
+		if (errorMessage !=null){
+			alert(errorMessage);
+		}
+
+		let updateMessage = /*[[${updateMessage}]]*/ "";
+		if (updateMessage !=null){
+			alert(updateMessage);
+		}
+		let insertMessage = /*[[${insertMessage}]]*/ "";
+		if (insertMessage !=null){
+			alert(insertMessage);
+		}
+
+	    let deleteMessage = /*[[${deleteMessage}]]*/ "";
+        if (deleteMessage) {
+            alert(deleteMessage);
+        }
+	});
+</script>
+
+<div class="requirePage" layout:fragment="content">
+	<center>
+		<form action="addContent" method="post" th:object="${requireForm}" id="insertBoard">
+			<input type="hidden" name="userSeq" th:value="${userSeq}">
+			<table border="1">
+				<tr>
+					<td width="70" align="center">제목</td>
+					<td width="700">
+						<input type="text" name="title" style="width: 500px; border:hidden" th:field="*{title}" >
+						<p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError">Incorrect data</p>
+					</td>
+				</tr>
+				<tr>
+					<td align="center"> 내용 </td>
+					<td align="Left">
+						<textarea name="content" rows="6" style="width: 700px; height:500px; border:hidden"  th:field="*{content}" >
+						</textarea>
+						<p th:if="${#fields.hasErrors('content')}"  th:errors="*{content}" class="fieldError">Incorrect data</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<button type="submit">등록</button>
+						<a href="/require">취소</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</center>
+</div>
+</html>

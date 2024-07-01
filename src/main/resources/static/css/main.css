@@ -1,0 +1,84 @@
+ body {
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        }
+ 
+.container {
+        width: auto;
+        margin: 0 auto;
+        overflow: auto;
+        }
+
+
+.main1 {
+        font-size: 22px;
+        font-weight: normal;
+        text-align: center;
+        padding: 20px 0;
+          }
+
+.searchText {
+        width: 700px;
+        border-radius: 5px;
+        background: #ccc;
+        font-size: 18px;
+        font-weight: bolder;
+        padding: 15px;
+        }
+
+.searchBtn {
+        font-size: 18px;
+        color: #ccc;
+        border: 2px solid rgb(108, 108, 108);
+        border-radius: 6px;
+        margin: 0 5px;
+        background-color: inherit;
+        cursor: pointer;
+        padding: 14px;
+        position: relative;
+        }
+
+
+.main2 {
+        font-size: 12px;
+        font-weight: bold;
+        padding: 20px;
+        margin-top: 80px;
+        margin-bottom: 30px;
+        text-align:center;
+
+
+        }
+.genreTitle {
+            margin-bottom: 80px;
+            color: #f9f9f9;
+
+
+        }
+
+.main3 {
+            font-size: 12px;
+            font-weight: bold;
+            padding: 20px;
+            margin-bottom: 150px;
+            text-align:center;
+        }
+.yearTitle {
+
+            margin-top: 50px;
+            margin-bottom: 70px;
+            color: #f9f9f9;
+
+        }
+        
+.yearBox1 .btn {
+            margin-left: 30px;
+        }
+        
+.center p {
+            color: #fff;
+        }

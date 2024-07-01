@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+	<link rel="stylesheet" th:href="@{/css/find.css}">
+
+</th:block>
+
+<th:block layout:fragment="script">
+	<script th:src="@{/js/find.js}"></script>
+</th:block>
+
+
+    <div class = "find_container" layout:fragment="content">
+		<div class="find_wrapper"> 	
+
+			<div class = "find_box">
+				
+				<h1 style = "text-align: center; color:white;">아이디 찾기</h1>
+				
+				<form action="/user/findId" class="find_id_form" method="post" th:object="${userFindForm}" id="form_id">
+					<label class ="lab">이름</label><br> <!-- 휴대전화 입력 -->
+					<input type='text' th:field="*{name}" class="find_input" name='name' placeholder='이름 입력' id="find_name">
+					<br><br>
+					
+					<label class ="lab">휴대전화</label><br> <!-- 휴대전화 입력 -->
+					<input type='text' class="find_input" th:field="*{tel}" name='phone' placeholder='휴대전화 입력(-없이)' id="find_phone">
+				
+					<br><br>
+					<p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message" style="color: white;"></p>
+					<br>
+					<input type="submit" class="find_btn" id="find_id_btn" value="아이디 찾기">
+				
+					
+					<hr style="border: solid 1px; color:gray;"><br>
+				</form><!--.find_id_form-->
+
+                <form action="/user/findPw" class="find_pw_form" method="post" th:object="${userFindForm}" id="form_pw">
+					
+					<h1 style = "text-align: center; color:white;">비밀번호 찾기</h1>
+					
+				
+					<label class ="lab">아이디</label><br> 
+					<input type='text' th:field="*{id}" class="find_input" name='ID' placeholder='아이디 입력' id="find_id"><br><br>
+					
+					<label class ="lab">이름</label><br> 
+					<input type='text' th:field="*{name}" class="find_input" name='name' placeholder='이름 입력' id="find_name2"><br><br>
+					
+					<label class ="lab">휴대전화</label><br> 
+					<input type='text' th:field="*{tel}" class="find_input" name='phone' placeholder='휴대전화 입력(-없이)' id="find_phone2"><br><br>
+
+					<p th:if="${errorMessage2}" th:text="${errorMessage2}" class="error-message" style="color: white;"></p>
+
+					<br>
+					<!-- "비밀번호 찾기" 버튼 클릭시 빈칸이나 오타있는지 정규식으로 확인  -->
+					<input type="submit" class="find_btn" id="find_pw_btn" value="비밀번호 찾기">
+				</form> <!--.find_pw_form-->				
+			</div><!--.find-box-->
+		</div><!--.find_wrapper-->
+	</div><!--.find_container-->
+
+
+
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/myPage_review.css}">
+</th:block>
+
+<script th:inline="javascript">
+    $(document).ready(function() {
+        console.log("Document is ready");
+
+        let errorMessage = /*[[${errorMessage}]]*/ "";
+        if (errorMessage) {
+            alert(errorMessage);
+        }
+
+        let deleteMessage = /*[[${deleteMessage}]]*/ "";
+        if (deleteMessage) {
+            alert(deleteMessage);
+        }
+
+        let updateMessage = /*[[${updateMessage}]]*/ "";
+        if (updateMessage) {
+            alert(updateMessage);
+        }
+
+    });
+
+    async function deleteScore (obj){
+        if(confirm("리뷰를 삭제할까요?")){
+            let scoreSeq = obj.dataset.id;
+            let url = "/myPage/review/delete?scoreSeq="+scoreSeq;
+
+            try{
+                const response = await fetch(url,{
+                    method : 'DELETE',
+                    headers:{
+                        'Content-Type' :'application/json'
+                    },
+                    cache : 'no-cache'
+                })
+                if (!response.ok){
+                    if (response.status==401){
+                        alert("로그인 후 이용해주세요")
+                        location.href="/members/login"
+                    } else {
+                        let errorText = await response.text();
+                        alert(errorText);
+                    }
+                    return;
+                }
+
+                const result = await response.json();
+
+                alert("삭제 완료되었습니다");
+
+                loadPage(1);
+            }catch(error){
+                alert(error.message);
+            }
+        }
+    };
+
+    function loadPage(page) {
+        $.ajax({
+            type: "GET",
+            url: "/myPage/review?page=" + page,
+            success: function(response) {
+                $("#contentCell").html(response); // contentCell에 새로운 페이지 HTML 삽입
+            },
+            error: function(xhr, status, error) {
+                console.error("Error loading page:", error);
+            }
+        });
+    };
+
+    function moveReviewPage(scoreSeq) {
+        $.ajax({
+            type: "GET",
+            url: "/myPage/reviewUpdate?scoreSeq="+scoreSeq ,
+            success: function(response) {
+                $("#contentCell").html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error loading page:", error);
+            }
+        });
+    };
+</script>
+
+<center>
+    <form method="GET" class="reviewPage" >
+        <table border="1">
+            <tr>
+                <th width="100">포스터</th>
+                <th width="100">영화제목</th>
+                <th width="100">별점</th>
+                <th width="300">후기</th>
+                <th width="200">작성일</th>
+                <th width="50">추천수</th>
+            </tr>
+            <tr th:if="${count == 0}">
+                <td colspan="6" width="850" height="500" align="center">
+                    <h3> 작성하신 리뷰가 없습니다. </h3>
+                </td>
+            </tr>
+            <tr th:each="review : ${reviews}">
+                <td width="100" height="150" align="center"><img class="poster" th:src="${review.poster}" th:alt="${review.movieName}"></td>
+                <td align="center" th:text="${review.movieName}">제목</td>
+                <td align="center" >
+                    <span th:if="${review.score}==1 ">★☆☆☆☆</span>
+                    <span th:if="${review.score}==2 ">★★☆☆☆</span>
+                    <span th:if="${review.score}==3 ">★★★☆☆</span>
+                    <span th:if="${review.score}==4 ">★★★★☆</span>
+                    <span th:if="${review.score}==5 ">★★★★★</span>
+                </td>
+                <td align="center" th:text="${review.reviewContent}"></td>
+                <td align="center" >
+                    <p th:text="${review.postDate}"/><br>
+                    <a th:onclick="'moveReviewPage('+${review.scoreSeq}+')'" id="updateButton">수정</a>
+                    <a th:data-id="${review.scoreSeq}" onclick="deleteScore(this)">삭제</a>
+                </td>
+                <td align="center" th:text="${review.reviewLike}">추천수</td>
+            </tr>
+            <tr>
+                <td th:if="${count != 0}" colspan="7" align="center" >
+                    <div th:with="start=${pageHandler.beginPage},end=${pageHandler.endPage}">
+                        <ul class="pageList">
+                            <li  th:if="${not pageHandler.firstPage}" class="page-item" th:classappend="${pageHandler.firstPage} ? 'disabled' : '' ">
+                                <a th:onclick="'loadPage('+${pageHandler.page - 1}+')'" aria-label='Previous' class="page-link" >
+                                    <span aria-hidden='true'>Previous&nbsp;</span>
+                                </a>
+                            </li>
+
+                            <li th:each="page : ${#numbers.sequence(start,end)}" th:classappend="${pageHandler.page eq page} ? 'active' : '' " class="page-item" >
+                                <a th:onclick="'loadPage('+${page}+')'" th:inline="text" class="page-link">[[${page}]]&nbsp;</a>
+                            </li>
+
+                            <li th:if="${not pageHandler.lastPage}" th:classappend="${pageHandler.lastPage} ? 'disabled' : '' " class="page-item" >
+                                <a th:onclick="'loadPage('+${pageHandler.page + 1}+')'" aria-label='Next' class="page-link">
+                                    <span aria-hidden='true'>Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</center>
+
+</html>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnpl.wum.user.mapper.UserMapper">
+
+    <insert id="insertMember" parameterType="userDto" useGeneratedKeys="true" keyProperty="userSeq" keyColumn="user_seq">
+        INSERT INTO user(id, password, nickname, name, birth, tel, email, role)
+        VALUES(#{id}, #{password}, #{nickname}, #{name}, #{birth}, #{tel}, #{email}, #{role})
+    </insert>
+
+    <!-- 중복 아이디 검색 -->
+    <select id="overlapId" resultType="userDto" parameterType="String">
+        SELECT user_seq, id, nickname, email, tel
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <!-- 중복 전화번호 검색 -->
+    <select id="overlapTel" resultType="userDto" parameterType="String">
+        SELECT user_seq, id, nickname, email, tel
+        FROM user
+        WHERE tel = #{tel}
+    </select>
+
+    <!-- 중복 닉네임 검사 -->
+    <select id="overlapNickname" resultType="userDto" parameterType="String">
+        SELECT user_seq, id, nickname, email, tel
+        FROM user
+        WHERE nickname = #{nickname}
+    </select>
+
+    <select id="overlapEmail" resultType="userDto" parameterType="String">
+        SELECT user_seq, id, nickname, email, tel
+        FROM user
+        WHERE email = #{email}
+    </select>
+
+    <!-- Login -->
+    <select id="login" resultType="userDto" parameterType="String">
+        SELECT user_seq, id, password, nickname, name, birth, email, tel, role
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <!-- 이름, 전화번호로 아이디 찾기-->
+    <select id="findId" resultType="userDto" parameterType="map">
+        SELECT id
+        FROM user
+        WHERE name=#{name} AND tel = #{tel}
+    </select>
+
+    <!-- 아이디,이름,전화번호로 DB확인 -->
+    <select id="findPw" resultType="userDto" parameterType="map">
+        SELECT user_seq, id, password, nickname, name, birth, email, tel, role
+        FROM user
+        WHERE id=#{id} AND name=#{name} AND tel = #{tel}
+    </select>
+
+    <!-- 비밀번호 변경 -->
+    <update id="updatePw" parameterType="userDto">
+        UPDATE user
+        SET password=#{password}
+        WHERE id=#{id} AND name=#{name} AND tel=#{tel}
+    </update>
+
+    <!-- 페이징 처리를 위한 카운트-->
+    <select id="countUsers" parameterType="map" resultType="int">
+        SELECT count(*)
+        FROM user
+    </select>
+
+    <!-- 사용자 조회 -->
+    <select id="userList" resultType="userDetailDto" parameterType="map">
+        SELECT ROWNUM() as num, user_seq as seq, id, password, nickname, name, tel, reg_date,
+        (SELECT count(*)
+        FROM user INNER JOIN `require`
+            ON user.user_seq = require.user_seq
+            WHERE user.user_seq = seq ) AS cnt
+        FROM user
+        ORDER by user_seq ASC
+        LIMIT #{pageSize} OFFSET #{page};
+    </select>
+
+    <select id="findUserSeq">
+        SELECT user_seq FROM user WHERE id = #{id}
+    </select>
+
+    <select id="findUser" resultType="userDto" parameterType="Long">
+        SELECT user_seq, id, password, nickname, name, birth, email, tel, role
+        FROM user
+        WHERE user_seq=#{userSeq}
+    </select>
+
+    <delete id="deleteUsers" parameterType="Long">
+        DELETE FROM user
+        WHERE user_seq = #{userSeq}
+    </delete>
+
+    <!-- 페이징 처리를 위한 카운트-->
+    <select id="countUsersRequire" parameterType="map" resultType="int">
+        SELECT count(*)
+        FROM user
+        WHERE user_seq=#{userSeq}
+    </select>
+
+    <!-- 사용자 조회 -->
+    <select id="userRequireList" resultType="requireDto" parameterType="map">
+        SELECT require_seq, user_seq, title, content, post_date, require_like
+        FROM `require`
+        WHERE user_seq = #{seq}
+        ORDER by require_seq ASC
+        LIMIT #{pageSize} OFFSET #{page};
+    </select>
+    
+    <select id="getUserDetail" resultType="userDetailDto" parameterType="Long">
+        SELECT user_seq, id, password, nickname, name, tel, reg_date
+        FROM user
+        WHERE user_seq = #{userSeq}
+    </select>
+
+    <delete id="deleteUsersRequire" parameterType="Long">
+        DELETE FROM `require`
+        WHERE require_seq=#{requireSeq}
+    </delete>
+
+
+</mapper>

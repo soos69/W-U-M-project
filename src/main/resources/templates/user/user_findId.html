@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/find.css}">
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/find.js}"></script>
+</th:block>
+
+    <div class="find_container" layout:fragment="content">
+        <div class="find_wrapper">
+            <!-- 인증이 정상적으로 넘어가면 이름과 등록된 전화번호로 DB에서 검색후 리턴-->
+            <div class="id_window" id="id_window">
+                <div class="id_body">
+                    <h2>아이디 찾기 결과</h2>
+                    <br><br>
+                    <p th:text="'아이디는 ' + ${userId} + '입니다.'"></p>
+                    <br>
+                    <div class="closeBtn">
+                        <input type="button" class="id_close" value="확인" id="id_close" onclick="window.location.href = '/user/login'">
+                    </div><!--.idCloseBtn-->
+                </div> <!--.id_body-->
+            </div><!--.id_winodw-->
+        </div><!--.find-wrapper-->
+    </div><!--.find_container-->
+
+</html>

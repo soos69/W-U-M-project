@@ -1,0 +1,110 @@
+@charset "UTF-8";
+*{
+    margin: 0;
+    padding: 0;
+	background-color: #1f1e1e;
+
+}
+
+ul, ol{
+    list-style: none;
+}
+
+.logo{
+    margin-top: 30px;
+    text-align: center;
+    transform: scale(1.2);
+}
+
+.menu{
+  text-align: right;
+  margin-right: 250px;
+
+
+}
+
+.dropdown{
+    position : absolute;
+    display : inline-block;
+
+}
+
+.dropbtn{
+    font-family : 'Material Icons';
+    text-align: center;
+    border : 1px solid rgb(108, 108, 108);
+    border-radius : 4px;
+    font-weight: 400;
+    color : rgb(255, 255, 255);
+    padding : 12px;
+    width :80px;
+    text-align: center;
+    cursor : pointer;
+    font-size : 18px;
+}
+
+.dropdown-content{
+    display : none;
+    position : absolute;
+    z-index : 1;
+    font-weight: 400;
+    min-width : 80px;
+    text-align : left;
+}
+
+.dropdown-content li a{
+    display : block;
+    text-decoration : none;
+    color : rgb(226, 225, 225);
+    font-size: 18px;
+    font-family : 'Material Icons';
+    padding : 12px 20px;
+
+
+}
+
+.dropdown-content a:hover{
+    background-color : #313131
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+    margin: 0;
+}
+
+body {
+    min-height: 100%;
+}
+
+.footer {
+    position: absolute;
+    width: 100%;
+    padding: 15px 0;
+    text-align: center;
+    color: #ccc;
+}
+
+.team_name {
+	font-weight: bold;
+	font-size: 25px;
+}
+
+.footer li {
+	display: inline;
+	padding-right: 16px;
+}
+
+.footer li a{
+    color: #ccc;
+    text-decoration: none;
+}
+
+.content{
+    margin-left: 200px;
+    margin-right: 200px;
+}

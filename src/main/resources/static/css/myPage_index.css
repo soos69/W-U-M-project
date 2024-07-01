@@ -1,0 +1,71 @@
+@charset "uft-8";
+*{
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-size: 16px;
+}
+
+h2{
+    color: rgb(222, 222, 222);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size:18px;
+}
+.mypage_info {
+  padding:20px;
+  font-size: 13px;
+
+}
+.mypage_info span{
+   text-decoration: underline;
+   color : rgb(211 203 166);
+   font-style:bold;
+
+}
+body{
+    background-color: #1f1e1e;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: white;
+    font-size: 15px; /* 기본 폰트 사이즈를 16px로 조정 */
+    line-height: 20px;
+}
+a{
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+
+
+}
+img {
+    vertical-align: middle;
+    border: 0;
+}
+.wrap{
+    width: 100%;
+    min-width: 1200px;
+}
+.container{
+    width: 1200px;
+    margin:50px auto;
+}
+
+#menu{
+    display: flex;
+    flex-direction: column;
+    
+}
+#menu a{
+    margin: 15px auto;
+    font-size: 15px; /* 메뉴 항목 글씨 크기 조정 */
+}
+
+table { 
+    background-color: #444444;
+    font-size: 20px; /* 테이블 글씨 크기 조정 */
+}
+
+td, th {
+    padding: 10px; /* 셀 내부 여백 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>WUM</title>
+
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!--존재할 때 만 사용-->
+    <th:block layout:fragment="script"></th:block>
+    <th:block layout:fragment="css"></th:block>
+</head>
+<body>
+<!-- fragment : 공통으로 반복되는 영역-->
+<!-- replace : fragment의 공통영역을 html에 삽입 태그 전체를 교체함 "파일경로::파일이름"-->
+	<div th:replace="fragments/header::header"></div>
+
+    <div layout:fragment="content" class="content"></div>
+
+    <div th:replace="fragments/footer::footer"></div>
+
+
+</body>
+</html>

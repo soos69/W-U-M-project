@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/myPage_index.css}">
+</th:block>
+
+<div class="wrap" layout:fragment="content">
+    <center>
+        <input type="hidden" name="userSeq" th:value="${user.userSeq}">
+        <table border="1" class="container">
+            <tr>
+                <td width="150" height="200" align="center">
+                    <h2>마이페이지</h2>
+                    <div class="mypage_info">
+                        <span th:text="${user.name}"></span> 님 반갑습니다
+                    </div>
+                </td>
+                <td id="contentCell" rowspan="2" width="850" height="700">
+                    <!-- Ajax로 동적으로 로딩될 내용 -->
+                </td>
+            </tr>
+            <tr>
+                <td id="menu" height="500" align="center">
+                    <a onclick="loadInfoPage()" >회원정보 변경</a><br>
+                    <a onclick="loadReviewPage()">내가 쓴 리뷰</a><br>
+                    <a onclick="loadRequirePage()">내가 쓴 영화요청</a><br>
+                    <a onclick="loadWishListPage()">내 찜 목록</a><br>
+                </td>
+            </tr>
+        </table>
+    </center>
+</div>
+<th:block layout:fragment="script">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:inline="javascript">
+        window.onload = function() {
+           $.ajax({
+               type: "GET",
+               url: "/myPage/info",
+               success: function(response) {
+                   $("#contentCell").html(response);
+               },
+               error: function(xhr, status, error) {
+                   console.error("Error fetching page:", error);
+               }
+           });
+       }
+
+        function loadInfoPage() {
+           $.ajax({
+               type: "GET",
+               url: "/myPage/info",
+               success: function(response) {
+                   $("#contentCell").html(response);
+               },
+               error: function(xhr, status, error) {
+                   console.error("Error fetching page:", error);
+               }
+           });
+       }
+       function loadReviewPage() {
+           $.ajax({
+               type: "GET",
+               url: "/myPage/review?page=1",
+               success: function(response) {
+                   $("#contentCell").html(response);
+               },
+               error: function(xhr, status, error) {
+                   console.error("Error fetching page:", error);
+               }
+           });
+       }
+
+       function loadRequirePage() {
+           $.ajax({
+               type: "GET",
+               url: "/myPage/require?page=1",
+               success: function(response) {
+                   $("#contentCell").html(response);
+               },
+               error: function(xhr, status, error) {
+                   console.error("Error fetching page:", error);
+               }
+           });
+       }
+
+       function loadWishListPage() {
+           $.ajax({
+               type: "GET",
+               url: "/myPage/wishList?page=1",
+               success: function(response) {
+                   $("#contentCell").html(response);
+               },
+               error: function(xhr, status, error) {
+                   console.error("Error fetching page:", error);
+               }
+           });
+       }
+    </script>
+</th:block>
+</html>

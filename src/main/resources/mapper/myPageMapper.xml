@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnpl.wum.myPage.mapper.MyPageMapper">
+    <!--  마이페이지 유저 정보  -->
+    <select id="selectUserInfo" parameterType="userInfoDto">
+        SELECT user_seq,name,birth,id,nickname,password,tel,email,reg_date
+        FROM user
+        WHERE user_seq = #{userSeq}
+    </select>
+<!--  유저 정보 업데이트  -->
+    <update id="updateUserInfo" parameterType="userInfoDto" >
+        UPDATE user SET password=#{password},nickname=#{nickname},tel=#{tel},email=#{email} WHERE user_seq = #{userSeq}
+    </update>
+    <select id="overlapNickname" resultType="userInfoDto" parameterType="String">
+        SELECT user_seq, id, nickname, email, tel
+        FROM user
+        WHERE nickname = #{nickname}
+    </select>
+    <select id="overlapEmail" resultType="userInfoDto" parameterType="String">
+        SELECT user_seq, id, nickname, email, tel
+        FROM user
+        WHERE email = #{email}
+    </select>
+    <select id="overlapTel" resultType="userInfoDto" parameterType="String">
+        SELECT user_seq, id, nickname, email, tel
+        FROM user
+        WHERE tel = #{tel}
+    </select>
+
+    <!-- 마이페이지 리뷰 -->
+    <select id="selectUserScore" parameterType="Map">
+        SELECT score_seq,user_seq,movie_name,score,review_content,review_like,TO_CHAR(post_date,'YYYY-MM-DD HH24:MI:SS') post_date,poster
+        FROM score s, movie m
+        WHERE s.movie_seq = m.movie_seq AND
+        user_seq = #{userSeq}
+        ORDER BY score_seq DESC LIMIT #{pageSize} OFFSET #{page};
+    </select>
+<!-- 페이징을 위한 리뷰 카운트   -->
+    <select id="countUserScore" resultType="int">
+        SELECT count(*) FROM score WHERE user_seq = #{userSeq}
+    </select>
+    <!-- 게시판에서 삭제-->
+    <delete id="deleteScore" >
+        DELETE FROM score WHERE score_seq = #{scoreSeq} AND user_seq = #{userSeq}
+    </delete>
+
+<!--  리뷰수정 페이지  -->
+    <select id="userScoreContent" parameterType="Map" resultType="userScoreDto">
+        SELECT score_seq,user_seq,movie_name,score,review_content,review_like,TO_CHAR(post_date,'YYYY-MM-DD HH24:MI:SS') post_date,poster
+        FROM score s, movie m
+        WHERE s.movie_seq = m.movie_seq AND
+        user_seq = #{userSeq} AND score_seq = #{scoreSeq}
+    </select>
+    <!--  리뷰수정기능  -->
+    <update id="scoreUpdate" parameterType="userScoreDto">
+        UPDATE score SET review_content = #{reviewContent} , score = #{score} WHERE score_seq = #{scoreSeq}
+    </update>
+    <!--  페이지안에서 리뷰 삭제  -->
+    <delete id="deleteScoreContent" >
+        DELETE FROM score WHERE score_seq = #{scoreSeq} AND user_seq=#{userSeq}
+    </delete>
+
+
+    <!-- 마이페이지 영화요청 -->
+    <select id="selectUserRequire" parameterType="Map" resultType="userRequireDto">
+        SELECT require_seq,user_seq,title,content, TO_CHAR(post_date,'YYYY-MM-DD HH24:MI:SS') post_date,require_like
+        FROM `require`
+        WHERE user_seq = #{userSeq}
+        ORDER BY require_seq DESC LIMIT #{pageSize} OFFSET #{page};
+    </select>
+    <select id="userRequireContent" parameterType="Map" resultType="userRequireDto">
+        SELECT require_seq,user_seq,title,content, TO_CHAR(post_date,'YYYY-MM-DD HH24:MI:SS') post_date,require_like
+        FROM `require`
+        WHERE user_seq = #{userSeq}
+        AND require_seq = #{requireSeq}
+    </select>
+    <select id="countUserRequire" resultType="int">
+        SELECT count(*) FROM `require` WHERE user_seq = #{userSeq}
+    </select>
+    <update id="requireUpdate" parameterType="userRequireDto">
+        UPDATE `require` SET title=#{title} , content = #{content} WHERE require_seq = #{requireSeq}
+    </update>
+    <delete id="deleteRequire" parameterType="Map">
+        DELETE FROM `require` WHERE require_seq = #{requireSeq} AND user_seq=#{userSeq}
+    </delete>
+
+    <!-- 마이페이지 찜 목록 -->
+    <select id="selectWish" resultType="userWishDto" parameterType="Map">
+        SELECT wish_seq,user_seq,w.movie_seq,movie_name,poster FROM wish w, movie m WHERE w.movie_seq = m.movie_seq AND user_seq = #{userSeq}
+        ORDER BY wish_seq DESC LIMIT #{pageSize} OFFSET #{page};
+    </select>
+    <select id="countUserWish">
+        SELECT count(*) FROM wish WHERE user_seq=#{userSeq}
+    </select>
+    <delete id="deleteWish">
+        DELETE FROM wish WHERE wish_seq = #{wishSeq}
+    </delete>
+</mapper>

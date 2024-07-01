@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/search.css}">
+</th:block>
+
+<div class="wrap" layout:fragment="content">
+    <input type="hidden" name="searchText" th:value="${movieSearchDto.searchText}">
+
+    <div class="search">
+        <form th:action="@{/search/searchText}" method="post" role="form" th:object="${movieSearchDto}">
+            <div class="searchBox">
+                <input type="search" th:field="*{searchText}" class="searchText" placeholder="What U Want" aria-label="Search"/>
+                <button type="submit" class="searchBtn">검색</button>
+            </div>
+        </form>
+    </div> <!-- search -->
+
+    <div th:if="${not #strings.isEmpty(movieSearchDto.searchText)}" class="center">
+        <p class="h3 font-weight-bold" th:text="'[' + ${movieSearchDto.searchText} + '] 검색 결과'"></p>
+    </div>
+
+    <div class="main">
+        <th:block th:each="movie: ${movie}">
+            <div class="col-md-4 margin">
+                <div class="movieBox">
+                    <a th:href="'/movie/' + ${movie.movieSeq}">
+                        <img th:src="${movie.poster}" th:alt="${movie.movieName}" />
+                        <h4 class="movie-title">[[${movie.movieName}]]</h4>
+                    </a>
+                </div>
+            </div> <!-- box -->
+        </th:block>
+    </div><!-- .main -->
+
+    <div th:with="start=${pageHandler.beginPage}, end=${pageHandler.endPage}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${pageHandler.firstPage}?'disabled': ''">
+                <a th:if="${not pageHandler.firstPage}" th:href="@{'/search/searchText/' + (${pageHandler.page - 1}) + '?searchText=' + ${movieSearchDto.searchText} + '&genre=' + ${movieSearchDto.genre} + '&movieYear=' + ${movieSearchDto.movieYear}}" aria-label='Previous' class="page-link">
+                    <span aria-hidden='true'>이전</span>
+                </a>
+                <a th:if="${pageHandler.firstPage}" href="#" class="page-link" aria-disabled="true">
+                    <span aria-hidden='true'>이전</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${pageHandler.page eq page}?'active':''">
+                <a th:href="@{'/search/searchText/' + ${page} + '?searchText=' + ${movieSearchDto.searchText} + '&genre=' + ${movieSearchDto.genre} + '&movieYear=' + ${movieSearchDto.movieYear}}" th:text="${page}" class="page-link"></a>
+            </li>
+
+            <li class="page-item" th:classappend="${pageHandler.lastPage}?'disabled' : ''">
+                <a th:if="${not pageHandler.lastPage}" th:href="@{'/search/searchText/' + (${pageHandler.page + 1}) + '?searchText=' + ${movieSearchDto.searchText} + '&genre=' + ${movieSearchDto.genre} + '&movieYear=' + ${movieSearchDto.movieYear}}" aria-label='Next' class="page-link">
+                    <span aria-hidden='true'>다음</span>
+                </a>
+                <a th:if="${pageHandler.lastPage}" class="page-link" aria-disabled="true">
+                    <span aria-hidden='true'>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div><!-- wrap -->
+
+</html>

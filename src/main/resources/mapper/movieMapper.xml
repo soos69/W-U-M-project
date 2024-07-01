@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnpl.wum.admin.mapper.MovieMapper">
+    <!-- 영화검색을 위한 sql -->
+    <sql id="movieSearchConditions">
+        <if test='searchText != null and searchText != ""'>
+            AND (movie_name LIKE CONCAT('%', #{searchText}, '%')
+            OR genre LIKE CONCAT('%', #{searchText}, '%')
+            OR director LIKE CONCAT('%', #{searchText}, '%')
+            OR keyword LIKE CONCAT('%', #{searchText}, '%')
+            OR actor LIKE CONCAT('%', #{searchText}, '%'))
+        </if>
+        <if test='genre != null and genre != "null"'>
+            AND genre LIKE CONCAT('%', #{genre}, '%')
+        </if>
+
+        <if test='movieYear != null and movieYear != "null"'>
+            <choose>
+                <when test="movieYear == '1980년대'">
+                    AND YEAR(movie_year) BETWEEN 1980 AND 1989
+                </when>
+                <when test="movieYear == '1990년대'">
+                    AND YEAR(movie_year) BETWEEN 1990 AND 1999
+                </when>
+                <when test="movieYear == '2000년대'">
+                    AND YEAR(movie_year) BETWEEN 2000 AND 2009
+                </when>
+                <when test="movieYear == '2010년대'">
+                    AND YEAR(movie_year) BETWEEN 2010 AND 2019
+                </when>
+                <when test="movieYear == '2020년대'">
+                    AND YEAR(movie_year) BETWEEN 2020 AND 2029
+                </when>
+            </choose>
+        </if>
+    </sql>
+
+    <!-- 영화추가 -->
+    <insert id="insertMovie" parameterType="movieDto" useGeneratedKeys="true" keyProperty="movieSeq" keyColumn="movie_seq">
+        INSERT INTO movie(genre, poster, movie_name, movie_year, director, actor, plot, rating, keyword)
+        VALUES(#{genre}, #{poster}, #{movieName}, #{movieYear}, #{director}, #{actor}, #{plot}, #{rating}, #{keyword})
+    </insert>
+
+    <!-- 영화전체목록조회 -->
+    <select id="listAllMovie" resultType="movieDto">
+        SELECT movie_seq, genre, poster, movie_name, movie_year, director, actor, plot, rating, keyword
+        FROM movie
+    </select>
+
+    <!-- 전체 검색 -->
+    <select id="mainSearchQuery" parameterType="map" resultType="movieDto">
+        SELECT movie_seq, genre, poster, movie_name, movie_year, director, actor, plot, rating, keyword
+        FROM movie
+        WHERE 1=1
+        <include refid="movieSearchConditions"/>
+        ORDER BY movie_year DESC
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
+
+    <!-- 영화전체목록(페이지) -->
+    <select id="movieListPage" parameterType="map" resultType="movieDto">
+        SELECT movie_seq, SUBSTRING_INDEX(genre, ',', 3) AS genre, poster, movie_name, movie_year, director, SUBSTRING_INDEX(actor, ',', 5) AS actor, plot, rating, SUBSTRING_INDEX(keyword, ',', 5) AS keyword
+        FROM movie
+        <where>
+            <include refid="movieSearchConditions"/>
+        </where>
+        ORDER BY movie_seq DESC
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
+
+    <!-- 페이징 처리를 위한 전체목록 개수세기 -->
+    <select id="countAllMovie" parameterType="map" resultType="int">
+        SELECT count(*)
+        FROM movie
+        <where>
+            <include refid="movieSearchConditions"/>
+        </where>
+    </select>
+
+    <!-- 메인에 표시되는 영화-->
+    <select id="mainSelect" parameterType="map" resultType="movieMainDto">
+        SELECT movie_seq, movie_name, poster
+        FROM movie
+        <where>
+            <include refid="movieSearchConditions"/>
+        </where>
+        ORDER BY movie_seq DESC
+        LIMIT #{pageSize} OFFSET #{page}
+    </select>
+
+    <!-- 영화 상세-->
+    <select id="movieDetail" resultType="movieDto">
+        SELECT movie_seq, genre, poster, movie_name, movie_year, director, SUBSTRING_INDEX(actor, ',', 5) AS actor, plot, rating, keyword
+        FROM movie
+        WHERE movie_seq = #{movieSeq}
+    </select>
+
+    <select id="moviePoster" resultType="movieDto">
+        SELECT movie_seq, genre, poster, movie_name, movie_year, director, actor, plot, rating, keyword
+        FROM movie
+        WHERE movie_seq = #{movieSeq}
+    </select>
+
+    <!-- 영화수정 -->
+    <!-- dtl과 다르게 수정시에는 actor가 모두 보이게 하기위해 mapper 중복사용 -->
+    <select id="editMovie" resultType="movieDto">
+        SELECT movie_seq, genre, poster, movie_name, movie_year, director, actor, plot, rating, keyword
+        FROM movie
+        WHERE movie_seq = #{movieSeq}
+    </select>
+    <update id="updateMovie" parameterType="movieDto">
+        UPDATE movie
+        SET genre = #{genre}, poster = #{poster}, movie_name = #{movieName}, movie_year = #{movieYear}, director = #{director}, actor = #{actor}, plot = #{plot}, rating = #{rating}, keyword = #{keyword}
+        WHERE movie_seq = #{movieSeq}
+    </update>
+
+    <!-- 영화삭제 -->
+    <delete id="deleteMovie" parameterType="Long">
+        DELETE
+        FROM movie
+        WHERE movie_seq = #{movieSeq}
+    </delete>
+
+    <!-- wish -->
+    <insert id="insertWish" parameterType="map">
+        INSERT INTO wish(user_seq, movie_seq)
+        VALUES(#{userSeq}, #{movieSeq})
+    </insert>
+    <delete id="cancelWish" parameterType="map">
+        DELETE FROM wish
+        WHERE user_seq= #{userSeq} AND movie_seq = #{movieSeq}
+    </delete>
+    <select id="checkWish" parameterType="map" resultType="Long">
+        SELECT wish_seq
+        FROM wish
+        WHERE user_seq = #{userSeq} AND movie_seq = #{movieSeq}
+    </select>
+
+    <!-- 별점&리뷰 -->
+    <insert id="insertReview" parameterType="map">
+        INSERT INTO score (user_seq, movie_seq, review_content, score)
+        VALUES (#{userSeq}, #{movieSeq}, #{reviewContent}, #{score})
+    </insert>
+
+    <select id="showReview" parameterType="Long" resultType="scoreDto">
+        SELECT score_seq, movie_seq, score, review_content, review_like, post_date
+        FROM score
+        WHERE movie_seq=#{movieSeq}
+    </select>
+</mapper>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/find.css}">
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/update_pw.js}"></script>
+</th:block>
+
+    <div class="find_container" layout:fragment="content">
+        <div class="find_wrapper">
+            <!-- 아이디,이름,전화번호가 DB내용과 일치하면 새로운 비밀번호로 업데이트 -->
+            <div class="update_pw_window" id="update_pw_window">
+                <div class="update_pw_body">
+                    <h2 style="text-align: center;">비밀번호 변경</h2>
+                    <br>
+                    <form action="/user/updatePw" class="find_id_form" th:object="${userDto}" method="post" id="update_form">
+                        <input type="hidden" th:field="*{id}">
+                        <input type="hidden" th:field="*{name}">
+                        <input type="hidden" th:field="*{tel}">
+                        <label class = "lab">새 비밀번호 </label>
+                        <br><br>
+                        <input type="password" class="find_input" placeholder="비밀번호(숫자,영문,특수문자 조합 최소8자)" name="newPassword" id="pw">
+                        <br><br>
+                        <label class = "lab" >새 비밀번호확인 </label> <!-- 비밀번호 입력 -->
+                        <br><br>
+                        <input type="password" class="find_input" placeholder="비밀번호(숫자,영문,특수문자 조합 최소8자)" name="newPassword2" id="pw2">
+                        <br><br>
+                        <div class="closeBtn">
+                            <input type="submit" class="update_close" value="확인" id="update_close">
+                        </div><!--.closeBtn-->
+                    </form>
+                    <p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message" style="color: red;"></p>
+                </div> <!--.update_pw_body-->
+            </div> <!--.update_pw_window-->
+        </div><!--.find-wrapper-->
+    </div><!--.find_container-->
+
+</html>

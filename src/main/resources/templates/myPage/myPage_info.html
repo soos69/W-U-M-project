@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/myPage_review.css}">
+</th:block>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function() {
+        let errorMessage= /*[[${errorMessage}]]*/ "";
+        if (errorMessage != null){
+            alert(errorMessage);
+        }
+    })
+
+    $(document).ready(function() {
+        let updateMessage= /*[[${updateMessage}]]*/ "";
+        if (updateMessage != null){
+            alert(updateMessage);
+        }
+    })
+    function updateInfo() {
+        let password = $("input[name='password']").val();
+        let nickname = $("input[name='nickname']").val();
+        let tel = $("input[name='tel']").val();
+        let email = $("input[name='email']").val();
+
+        console.log("password:", password);
+        console.log("nickname:", nickname);
+        console.log("email:", email);
+        console.log("tel:", tel);
+
+        let data = {
+            password: password,
+            nickname: nickname,
+            tel: tel,
+            email: email
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/myPage/info/update",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function(response) {
+                 $("#contentCell").html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error loading page:", error);
+            }
+        });
+	};
+    function checkReg() {
+        let password = document.getElementById("password").value;
+        let password2 = document.getElementById("password2").value;
+        let email = document.getElementById("email").value || document.getElementById("email").placeholder;
+        let tel = document.getElementById("tel").value || document.getElementById("tel").placeholder;
+
+        console.log("password :"+password);
+        console.log("password2 :"+password2);
+        console.log("email :"+email);
+        console.log("tel :"+tel);
+
+        let pattern_chk = /^[0-9]*$/;
+        let pw_chk = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$/;
+        let email_chk = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/;
+
+        if (!pw_chk.test(password)) {
+            alert("비밀번호는 8자리 이상 문자, 숫자, 특수문자로 구성하여야 합니다.");
+            return false;
+        } else if(password != password2){
+            alert("비밀번호가 일치하지 않습니다");
+            return false;
+        } else if (!email_chk.test(email)) {
+            alert("이메일 형식이 올바르지 않습니다.");
+            return false;
+        } else if(!pattern_chk.test(tel)){
+            alert("전화번호에는 숫자만 입력하세요");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<div class="infoPage">
+    <center>
+        <form action="/myPage/info/update" id="userInfo" method="post" th:object="${userInfoForm}" >
+            <input type="hidden" name="userSeq" th:value="${userSeq}">
+            <table id="user-info" frameborder="0">
+                <tr >
+                    <td width="120" height="150">
+                        <label th:for="user-id">아이디</label>
+                        <br><br><br>
+                        <label th:for="password">비밀번호</label>
+                        <br><br><br>
+                        <label th:for="password2">비밀번호 확인</label>
+                        <br><br><br>
+                        <label th:for="user-name">이름</label>
+                        <br><br><br>
+                        <label th:for="user-birth">생일</label>
+                        <br><br><br>
+                        <label th:for="nickname">별명</label>
+                        <br><br><br>
+                        <label th:for="tel">전화번호</label>
+                        <br><br><br>
+                        <label th:for="email">이메일</label>
+                        <br><br><br>
+                        <label th:for="regDate">가입일자</label>
+                    </td>
+                    <td>
+                        <!-- 수정 불가능한 값은 input 말고 파라미터로 변경 -->
+                        <span id="user-id" th:text="${user.id}"/>
+                        <br><br><br>
+                        <input type="password" name="password" placeholder="비밀번호(숫자,영문,특수문자 조합 최소8자)" id="password" th:field="*{password}" >
+                        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">Incorrect data</p>
+                        <br th:unless="${#fields.hasErrors('password')}"><br th:unless="${#fields.hasErrors('password')}"><br th:unless="${#fields.hasErrors('password')}">
+                        <input type="password" name="password2" id="password2" placeholder="비밀번호(숫자,영문,특수문자 조합 최소8자)" th:field="*{password2}" >
+                        <br><br><br>
+                        <span id="user-name" th:text="${user.name}" />
+                        <br><br><br>
+                        <span id="user-birth" th:text="${user.birth}" />
+                        <br><br><br>
+                        <input type="text" name="nickname" id="nickname" th:placeholder="${user.nickname}" th:field="*{nickname}" >
+                        <p  th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="fieldError">Incorrect data</p>
+                        <br><br th:unless="${#fields.hasErrors('nickname')}"><br th:unless="${#fields.hasErrors('nickname')}">
+                        <input type="text" name="tel" id="tel" th:placeholder="${user.tel}" th:field="*{tel}" >
+                        <p  th:if="${#fields.hasErrors('tel')}" th:errors="*{tel}" class="fieldError">Incorrect data</p>
+                        <br><br th:unless="${#fields.hasErrors('tel')}"><br th:unless="${#fields.hasErrors('tel')}">
+                        <input type="text" name="email" id="email" th:placeholder="${user.email}" th:field="*{email}" >
+                        <p  th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect data</p>
+                        <br><br th:unless="${#fields.hasErrors('email')}"><br th:unless="${#fields.hasErrors('email')}">
+                        <span id="regDate" th:text="${user.regDate}" />
+                    </td>
+                </tr>
+                <tr id="buttons">
+                    <td colspan="2" align="right">
+                        <br>
+                        <button type="button" onclick="if (checkReg()) updateInfo();">수정하기</button>
+                        &nbsp;&nbsp;
+                        <button type="reset">취소</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </center>
+</div>
+</html>

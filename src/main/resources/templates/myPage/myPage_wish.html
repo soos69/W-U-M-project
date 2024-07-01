@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/myPage_wish.css}">
+</th:block>
+
+<script th:inline="javascript">
+    function page(page) {
+        location.href = "/myPage/wishList?page="+ page +"&userSeq=" + [[${userSeq}]];
+    }
+     $(document).ready(function() {
+        console.log("Document is ready");
+
+        let errorMessage = /*[[${errorMessage}]]*/ "";
+        if (errorMessage) {
+            alert(errorMessage);
+        }
+
+        let deleteMessage = /*[[${deleteMessage}]]*/ "";
+        if (deleteMessage) {
+            alert(deleteMessage);
+        }
+
+        let updateMessage = /*[[${updateMessage}]]*/ "";
+        if (updateMessage) {
+            alert(updateMessage);
+        }
+
+        $("#checkAll").click(function() {
+            let checkedStatus = this.checked;
+            console.log("Check All clicked, status: " + checkedStatus);
+            $("input[name='contentCheckbox']").each(function() {
+                $(this).prop("checked", checkedStatus);
+            });
+        });
+
+        async function deleteContent() {
+            if(confirm("영화를 삭제할까요?")){
+                let url = "/myPage/wishList/delete";
+                let dataList = [];
+                let paramData = {};
+
+                $("input[name='contentCheckbox']:checked").each(function() {
+                    let wishSeq = $(this).val();
+                    let data = { "wishSeq": wishSeq };
+                    dataList.push(data);
+                });
+
+                if (dataList.length === 0) {
+                    alert("삭제할 항목을 선택해주세요");
+                    return;
+                }
+
+                paramData['userWishDtoList'] = dataList;
+                let param = JSON.stringify(paramData);
+                console.log("Payload: ", param);
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: param,
+                        cache: 'no-cache'
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            alert("로그인 후 이용해주세요");
+                            location.href = "/";
+                        } else {
+                            let errorText = await response.text();
+                            alert(errorText);
+                        }
+                        return;
+                    }
+
+                    alert("삭제 완료되었습니다");
+
+                    loadPage(1);
+                } catch (error) {
+                    alert(error.message);
+                }
+            }
+        }
+
+        $("#deleteButton").click(deleteContent);
+    });
+
+     function loadPage(page) {
+        $.ajax({
+            type: "GET",
+            url: "/myPage/wishList?page=" + page,
+            success: function(response) {
+                $("#contentCell").html(response); // contentCell에 새로운 페이지 HTML 삽입
+            },
+            error: function(xhr, status, error) {
+                console.error("Error loading page:", error);
+            }
+        });
+    };
+</script>
+
+<div class="wishContent">
+    <table th:if="${count == 0}" border="1px">
+        <tr>
+            <td width="850" height="500" align="center">
+                <h3>
+                    찜 하신 영화가 없습니다.
+                </h3>
+            </td>
+        </tr>
+    </table>
+    <section class="main">
+        <div class="grid">
+            <div class="card-container" th:each="wish : ${wishList}">
+                <div class="card-box">
+                    <a th:href="'/movie/' + ${wish.movieSeq}">
+                        <input type="checkbox" name="contentCheckbox" class="movie-check" th:value="${wish.wishSeq}">
+                        <img class="poster" th:src="${wish.poster}" th:alt="${wish.movieName}">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <table class="pageNavigation" th:if="${count != 0}">
+        <tr>
+            <td align="center" width="400px">
+                <div th:with="start=${pageHandler.beginPage},end=${pageHandler.endPage}">
+                    <ul class="pageList">
+                        <li  th:if="${not pageHandler.firstPage}" class="page-item" th:classappend="${pageHandler.firstPage} ? 'disabled' : '' ">
+                            <a th:onclick="'loadPage('+${pageHandler.page - 1}+')'" aria-label='Previous' class="page-link" >
+                                <span aria-hidden='true'>Previous&nbsp;</span>
+                            </a>
+                        </li>
+
+                        <li th:each="page : ${#numbers.sequence(start,end)}" th:classappend="${pageHandler.page eq page} ? 'active' : '' " class="page-item" >
+                            <a th:onclick="'loadPage('+${page}+')'" th:inline="text" class="page-link">[[${page}]]&nbsp;</a>
+                        </li>
+
+                        <li th:if="${not pageHandler.lastPage}" th:classappend="${pageHandler.lastPage} ? 'disabled' : '' " class="page-item" >
+                            <a th:onclick="'loadPage('+${pageHandler.page + 1}+')'" aria-label='Next' class="page-link">
+                                <span aria-hidden='true'>Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+            <td align="right" width="100px">
+                <input type="checkbox" id="checkAll" style="display:none">
+                <label for="checkAll" class="checkboxText"> 전체선택 </label>
+                <button id="deleteButton">삭제</button>
+            </td>
+        </tr>
+    </table>
+</div>
+</html>
