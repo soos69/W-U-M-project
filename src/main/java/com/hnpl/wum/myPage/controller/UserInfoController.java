@@ -45,7 +45,11 @@ public class UserInfoController {
         return "myPage/myPage_info";
     }
     @PostMapping("/info/update")
-    public String updateInfo(@Validated @RequestBody UserInfoForm userInfoForm, BindingResult bindingResult,Model model,RedirectAttributes redirectAttributes,Principal principal){
+    public String updateInfo(@RequestBody UserInfoForm userInfoForm,
+                             BindingResult bindingResult,
+                             Model model,
+                             RedirectAttributes redirectAttributes,
+                             Principal principal){
         Long userSeq = userService.findUserSeq(principal.getName());
         UserInfoDto dto = userInfoService.selectUserInfo(userSeq);
 
@@ -59,17 +63,17 @@ public class UserInfoController {
             UserInfoDto infoDto = new UserInfoDto();
             infoDto.setPassword(userInfoForm.getPassword());
 
-            if(userInfoForm.getNickname().isBlank() || userInfoForm.getNickname().equals("")){
+            if(userInfoForm.getNickname().isBlank()){
                 infoDto.setNickname(dto.getNickname());
             }else {
                 infoDto.setNickname(userInfoForm.getNickname());
             }
-            if(userInfoForm.getEmail().isBlank() || userInfoForm.getEmail().equals("")){
+            if(userInfoForm.getEmail().isBlank()){
                 infoDto.setEmail(dto.getEmail());
             }else {
                 infoDto.setEmail(userInfoForm.getEmail());
             }
-            if(userInfoForm.getTel().isBlank() || userInfoForm.getTel().equals("")){
+            if(userInfoForm.getTel().isBlank()){
                 infoDto.setTel(dto.getTel());
             }else {
                 infoDto.setTel(userInfoForm.getTel());
@@ -77,9 +81,11 @@ public class UserInfoController {
             infoDto.setUserSeq(userSeq);
 
             userInfoService.updateUserInfo(infoDto,dto);
-            //model을 이용하여 데이터를 전달하면 redirect에서는 메세지가 유지되지 않음
-            //redirectArrtibute를 사용하여 메세지 전달
-            redirectAttributes.addFlashAttribute("updateMessage","수정 완료");
+
+            redirectAttributes.addFlashAttribute(
+                    "updateMessage",
+                    "수정 완료"
+            );
         } catch (Exception e){
             model.addAttribute("errorMessage",e.getMessage());
             model.addAttribute("user",dto);

@@ -90,7 +90,7 @@
                         <div th:with="start=${pageHandler.beginPage},end=${pageHandler.endPage}">
                             <ul class="pageList">
                                 <li  th:if="${not pageHandler.firstPage}" class="page-item" th:classappend="${pageHandler.firstPage} ? 'disabled' : '' ">
-                                    <a th:onclick="'loadPage('+${pageHandler.page - 1}+')'" aria-label='Previous' class="page-link" >
+                                    <a th:onclick="'loadPage('+${pageHandler.beginPage - 1}+')'" aria-label='Previous' class="page-link" >
                                         <span aria-hidden='true'>Previous&nbsp;</span>
                                     </a>
                                 </li>
@@ -100,7 +100,7 @@
                                 </li>
 
                                 <li th:if="${not pageHandler.lastPage}" th:classappend="${pageHandler.lastPage} ? 'disabled' : '' " class="page-item" >
-                                    <a th:onclick="'loadPage('+${pageHandler.page + 1}+')'" aria-label='Next' class="page-link">
+                                    <a th:onclick="'loadPage('+${pageHandler.endPage + 1}+')'" aria-label='Next' class="page-link">
                                         <span aria-hidden='true'>Next</span>
                                     </a>
                                 </li>

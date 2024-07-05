@@ -44,7 +44,7 @@
                 if (!response.ok){
                     if (response.status==401){
                         alert("로그인 후 이용해주세요")
-                        location.href="/members/login"
+                        location.href="/user/login"
                     } else {
                         let errorText = await response.text();
                         alert(errorText);
@@ -68,7 +68,7 @@
             type: "GET",
             url: "/myPage/review?page=" + page,
             success: function(response) {
-                $("#contentCell").html(response); // contentCell에 새로운 페이지 HTML 삽입
+                $("#contentCell").html(response);
             },
             error: function(xhr, status, error) {
                 console.error("Error loading page:", error);

@@ -35,7 +35,7 @@ public class UserScoreController {
 
     //리뷰 리스트 페이지
     @GetMapping("/review")
-    public String requireList(@RequestParam(value="page", required = false) Integer page, Model model, Principal principal){
+    public String reviewList(@RequestParam(value="page", required = false) Integer page, Model model, Principal principal){
         Long userSeq = userService.findUserSeq(principal.getName());
 
         if (page == null) page = 1;
@@ -70,6 +70,26 @@ public class UserScoreController {
         userScoreService.deleteScore(map);
 
         return new ResponseEntity<Long>(scoreSeq, HttpStatus.OK);
+    }
+
+    //리뷰 수정페이지에서 삭제
+    @PostMapping("/reviewUpdate/delete")
+    public String deleteScoreContent (@RequestParam("scoreSeq")Long scoreSeq,RedirectAttributes redirectAttributes,Model model,Principal principal){
+        Long userSeq = userService.findUserSeq(principal.getName());
+
+        try{
+            Map map = new HashMap<>();
+            map.put("userSeq",userSeq);
+            map.put("scoreSeq",scoreSeq);
+
+            userScoreService.deleteScore(map);
+            redirectAttributes.addFlashAttribute("deleteMessage","게시글이 삭제되었습니다");
+        }catch (Exception e){
+            model.addAttribute("errorMessage",e.getMessage());
+            return "myPage/myPage_requireUpdate";
+        }
+
+        return "redirect:/myPage/review?page=1";
     }
 
     //리뷰 수정 페이지
@@ -137,23 +157,5 @@ public class UserScoreController {
         return "redirect:/myPage/review?page=1";
     }
 
-    //리뷰 수정페이지에서 삭제
-    @PostMapping("/reviewUpdate/delete")
-    public String deleteScoreContent (@RequestParam("scoreSeq")Long scoreSeq,RedirectAttributes redirectAttributes,Model model,Principal principal){
-        Long userSeq = userService.findUserSeq(principal.getName());
 
-        try{
-            Map map = new HashMap<>();
-            map.put("userSeq",userSeq);
-            map.put("scoreSeq",scoreSeq);
-
-            userScoreService.deleteScore(map);
-            redirectAttributes.addFlashAttribute("deleteMessage","게시글이 삭제되었습니다");
-        }catch (Exception e){
-            model.addAttribute("errorMessage",e.getMessage());
-            return "myPage/myPage_requireUpdate";
-        }
-
-        return "redirect:/myPage/review?page=1";
-    }
 }

@@ -25,17 +25,24 @@
     </sql>
 
     <insert id="addRequire" parameterType="requireDto" useGeneratedKeys="true" keyColumn="require_seq" keyProperty="requireSeq">
-        INSERT INTO `require` (user_seq,title,content) VALUES (#{userSeq},#{title},#{content})
+        INSERT INTO `require` (user_seq,title,content)
+        VALUES (#{userSeq},#{title},#{content})
     </insert>
     <update id="updateRequire" parameterType="requireDto">
-        UPDATE `require` SET title = #{title} , content = #{content} WHERE require_seq = #{requireSeq} AND user_seq = #{userSeq}
+        UPDATE `require`
+        SET title = #{title} , content = #{content}
+        WHERE require_seq = #{requireSeq} AND user_seq = #{userSeq}
     </update>
     <delete id="deleteRequire" parameterType="map">
         DELETE FROM `require` WHERE user_seq = #{userSeq} AND require_seq = #{requireSeq}
     </delete>
 
     <select id="findRequireSeq" parameterType="requireDto">
-        SELECT require_seq FROM `require` WHERE user_seq = #{userSeq} AND title = #{title} AND content = #{content} AND post_date = #{postDate}
+        SELECT require_seq FROM `require`
+        WHERE user_seq = #{userSeq}
+        AND title = #{title}
+        AND content = #{content}
+        AND post_date = #{postDate}
     </select>
 
     <select id="requireList" parameterType="map" resultType="requireDto">

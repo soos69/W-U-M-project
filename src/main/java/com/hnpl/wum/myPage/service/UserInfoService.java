@@ -54,7 +54,6 @@ public class UserInfoService {
             throw new IllegalStateException("이미 사용중인 전화번호입니다.");
         }
     }
-
     public void overlapEmail(String email,UserInfoDto dto) {
         UserInfoDto findEmail = myPageMapper.overlapEmail(email);
 

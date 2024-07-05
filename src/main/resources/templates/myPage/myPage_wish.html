@@ -8,9 +8,7 @@
 </th:block>
 
 <script th:inline="javascript">
-    function page(page) {
-        location.href = "/myPage/wishList?page="+ page +"&userSeq=" + [[${userSeq}]];
-    }
+
      $(document).ready(function() {
         console.log("Document is ready");
 
@@ -71,7 +69,7 @@
                     if (!response.ok) {
                         if (response.status === 401) {
                             alert("로그인 후 이용해주세요");
-                            location.href = "/";
+                            location.href = "/user/login";
                         } else {
                             let errorText = await response.text();
                             alert(errorText);

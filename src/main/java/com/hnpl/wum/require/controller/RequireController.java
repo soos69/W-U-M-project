@@ -29,7 +29,10 @@ public class RequireController {
 
     //영화요청 게시판 리스트
     @GetMapping("")
-    public String requireList(@RequestParam(value="page", required = false) Integer page, @ModelAttribute("requireSearchDto") RequireSearchDto requireSearchDto, Model model, Principal principal){
+    public String requireList(@RequestParam(value="page", required = false) Integer page,
+                              @ModelAttribute("requireSearchDto") RequireSearchDto requireSearchDto,
+                              Model model,
+                              Principal principal){
         Long userSeq = userService.findUserSeq(principal.getName());
 
         if (page == null) page = 1;

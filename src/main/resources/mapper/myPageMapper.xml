@@ -70,18 +70,22 @@
         WHERE user_seq = #{userSeq}
         ORDER BY require_seq DESC LIMIT #{pageSize} OFFSET #{page};
     </select>
+
     <select id="userRequireContent" parameterType="Map" resultType="userRequireDto">
         SELECT require_seq,user_seq,title,content, TO_CHAR(post_date,'YYYY-MM-DD HH24:MI:SS') post_date,require_like
         FROM `require`
         WHERE user_seq = #{userSeq}
         AND require_seq = #{requireSeq}
     </select>
+
     <select id="countUserRequire" resultType="int">
         SELECT count(*) FROM `require` WHERE user_seq = #{userSeq}
     </select>
+
     <update id="requireUpdate" parameterType="userRequireDto">
         UPDATE `require` SET title=#{title} , content = #{content} WHERE require_seq = #{requireSeq}
     </update>
+
     <delete id="deleteRequire" parameterType="Map">
         DELETE FROM `require` WHERE require_seq = #{requireSeq} AND user_seq=#{userSeq}
     </delete>

@@ -21,7 +21,6 @@ public interface MyPageMapper {
     UserInfoDto overlapEmail(String email);
     UserInfoDto overlapTel(String tel);
 
-
     // 유저 영화요청
     List<UserRequireDto> selectUserRequire(Map map);
     int countUserRequire (Long userSeq);
